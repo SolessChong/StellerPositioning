@@ -80,6 +80,11 @@ namespace StellerPositioning
 
         public Star() { }
 
+        public String ToString()
+        {
+            return HRid + String.Format("RA:{0},Dec:{1},mag:{2}", RA.ToString(), Dec.ToString(), Magnitude.ToString());
+        }
+
         #endregion
     }
 

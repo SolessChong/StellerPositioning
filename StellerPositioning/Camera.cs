@@ -43,6 +43,14 @@ namespace StellerPositioning
         /// </summary>
         public float focalLength = 1;
 
+        /// <summary>
+        /// Field of View, in deg
+        /// </summary>
+        public float FoV = 60;
+        
+        /// <summary>
+        /// Rendering Resolution
+        /// </summary>
         public float scale = 1;
 
         HomographyMatrix homographMatrix = null;
@@ -68,6 +76,10 @@ namespace StellerPositioning
 
         #region Utilities
 
+        /// <summary>
+        /// Point to a specified star
+        /// </summary>
+        /// <param name="star">the target star</param>
         public void PointTo(Star star)
         {
             /*
@@ -98,8 +110,9 @@ namespace StellerPositioning
         /// </summary>
         /// <param name="p">Point position, in WC</param>
         /// <returns>pixel position</returns>
-        public PointF Project(MCvPoint3D32f p)
+        public PointF? Project(MCvPoint3D32f p)
         {
+
             //return new PointF(p.x, p.y);
             // Extend p
             Matrix<double> p_ex = new Matrix<double>(3, 1);
@@ -108,10 +121,15 @@ namespace StellerPositioning
             p_ex[2, 0] = p.z;
             
             var rst = HomographMatrix * p_ex;
-            rst[0, 0] = rst[0,0] / rst[2, 0] * scale; 
-            rst[1, 0] = rst[1,0] / rst[2, 0] * scale;
+            double x = rst[0, 0] / rst[2, 0];
+            double y = rst[1, 0] / rst[2, 0];
 
-            return new PointF((float)rst[0, 0], (float)rst[1, 0]);
+            float angle_rad = (float)(FoV / 2 / (180 / Math.PI));
+            if (Math.Abs(x) > Math.Tan(angle_rad) || Math.Abs(y) > Math.Tan(angle_rad))
+                return null;
+            else
+                return new PointF((float)x * focalLength * scale, (float)y * focalLength * scale);
+
         }
 
         /// <summary>
@@ -119,11 +137,36 @@ namespace StellerPositioning
         /// </summary>
         /// <param name="star">the star</param>
         /// <returns>pixel position</returns>
-        public PointF Project(Star star)
+        public PointF? Project(Star star)
         {
             var starPos = star.Position.GetNormalizedPoint();
 
             return Project(starPos);
+        }
+        
+        /// <summary>
+        /// Get night sky projection
+        /// </summary>
+        /// <param name="starList"></param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
+        public IImage RenderNightSky(List<Star> starList, int height, int width)
+        {
+            int x0 = width / 2; int y0 = height / 2;
+            var nightSky = new Image<Gray, Byte>(width, height);
+            foreach (var star in starList)
+            {
+                var rst = Project(star);
+                if (rst.HasValue)
+                {
+                    var pixelPos = rst.Value;
+                    pixelPos.X += x0; pixelPos.Y += y0;
+                    nightSky.Draw(new CircleF(pixelPos, 1), new Gray(255), (int)(-5 - star.Magnitude));
+                }
+            }
+
+            return nightSky;
         }
 
         #endregion

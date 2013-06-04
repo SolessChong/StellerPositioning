@@ -44,36 +44,41 @@ namespace StellerPositioning
         private void Form1_Load(object sender, EventArgs e)
         {
 
-            Projection.scale = 5000;
+            Projection.scale = 100;
 
-            brightStars = (new Data()).GetBrightStars(10000);
+            brightStars = (new Data()).GetBrightStars(1000);
+
+            for (int i = 0; i < 1000; i += 100)
+            {
+                MessageBox.Show(brightStars[i].ToString());
+            }
             
             canvas = new Image<Gray, byte>(new Size(width, height));
 
             // point to the celestial north pole
             camera = new Camera();
-            camera.scale = 500;
+            camera.scale = 1000;
 
             camera.PointTo(new Star(0, 90, 0));
 
         }
 
+        /// <summary>
+        /// Main Loop
+        /// Called on every fresh
+        /// </summary>
+        /// <param name="centerRA">Camera Position</param>
+        /// <param name="centerDec"></param>
         void FreshImage(float centerRA, float centerDec)
         {
             toolStripStatusLabel1.Text = "centerRA:"+centerRA.ToString() + ", centerDec:" + centerDec.ToString();
 
             canvas.Dispose();
-            canvas = new Image<Gray, byte>(new Size(width, height));
 
             camera.PointTo(new Star(centerRA, centerDec, 0));
 
-            for (int i = 0; i < 1000; i++)
-            {
-                var star = brightStars[i];
-                drawStar(canvas, star.RA, star.Dec, centerRA, centerDec, width / 2, height / 2, new Gray(50));
-
-            }
-
+            canvas = (Image<Gray, Byte>)camera.RenderNightSky(brightStars, height, width);
+/*
             drawStar(canvas, 11.005f, 61.75f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
             drawStar(canvas, 11.0167f, 56.366f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
             drawStar(canvas, 11.8835f, 53.683f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
@@ -81,7 +86,7 @@ namespace StellerPositioning
             drawStar(canvas, 12.9f, 5595f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
             drawStar(canvas, 13.383f, 54.916f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
             drawStar(canvas, 13.783f, 49.3f, centerRA, centerDec, width / 2, height / 2, new Gray(255));
-
+*/
             imageBox1.Image = canvas;
         }
 
@@ -95,11 +100,14 @@ namespace StellerPositioning
             */
             
             Star star = new Star(RA, Dec, 0);
-            var pixelPos = camera.Project(star);
-            pixelPos.X += x0; pixelPos.Y += y0;
+            var rst = camera.Project(star);
+            if (rst.HasValue)
+            {
+                var pixelPos = rst.Value;
+                pixelPos.X += x0; pixelPos.Y += y0;
 
-            canvas.Draw(new CircleF(pixelPos, 5), gray, 2);
-            
+                canvas.Draw(new CircleF(pixelPos, 5), gray, 2);
+            }            
         }
 
         private void imageBox1_MouseMove(object sender, MouseEventArgs e)
