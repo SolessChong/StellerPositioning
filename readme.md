@@ -17,3 +17,10 @@ Basic star coordinate convertion utility, Cartesian to J2000
 EmguCV
 LumenWorks CSV Reader @ Codeproject.com
 HYG star catalog @ github.com
+
+
+How to use it?
+==============
+
+It is not a complete project, not all the features are available in the UI.
+For a brief demo, just run the program and pull the scrollbar to navigate among the stars.
