@@ -41,7 +41,7 @@ namespace StellerPositioning
         /// <summary>
         /// Focal length
         /// </summary>
-        public float focalLength = 1;
+        public float focalLength = -1;
 
         /// <summary>
         /// Field of View, in deg
@@ -100,8 +100,8 @@ namespace StellerPositioning
             N = starPos;
 
             var up = new MCvPoint3D32f(0, 1, 0);
-            U = up.CrossProduct(n).GetNormalizedPoint();
-            V = N.CrossProduct(u).GetNormalizedPoint();   
+            U = N.CrossProduct(up).GetNormalizedPoint();
+            V = U.CrossProduct(N).GetNormalizedPoint();   
 
         }
 
@@ -162,7 +162,7 @@ namespace StellerPositioning
                 {
                     var pixelPos = rst.Value;
                     pixelPos.X += x0; pixelPos.Y += y0;
-                    nightSky.Draw(new CircleF(pixelPos, 1), new Gray(255), (int)(-5 - star.Magnitude));
+                    nightSky.Draw(new CircleF(pixelPos, 1), new Gray(155), (int)(-5 - star.Magnitude));
                 }
             }
 

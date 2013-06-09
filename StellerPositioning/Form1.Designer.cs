@@ -34,6 +34,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.trackBarRA = new System.Windows.Forms.TrackBar();
             this.trackBarDec = new System.Windows.Forms.TrackBar();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).BeginInit();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBarRA)).BeginInit();
@@ -44,7 +45,7 @@
             // 
             this.imageBox1.Location = new System.Drawing.Point(24, 28);
             this.imageBox1.Name = "imageBox1";
-            this.imageBox1.Size = new System.Drawing.Size(796, 507);
+            this.imageBox1.Size = new System.Drawing.Size(1085, 619);
             this.imageBox1.TabIndex = 2;
             this.imageBox1.TabStop = false;
             this.imageBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.imageBox1_MouseMove);
@@ -53,9 +54,9 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 605);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 711);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(980, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1315, 22);
             this.statusStrip1.TabIndex = 3;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -67,7 +68,7 @@
             // 
             // trackBarRA
             // 
-            this.trackBarRA.Location = new System.Drawing.Point(24, 541);
+            this.trackBarRA.Location = new System.Drawing.Point(24, 670);
             this.trackBarRA.Maximum = 240;
             this.trackBarRA.Name = "trackBarRA";
             this.trackBarRA.Size = new System.Drawing.Size(796, 45);
@@ -76,7 +77,7 @@
             // 
             // trackBarDec
             // 
-            this.trackBarDec.Location = new System.Drawing.Point(842, 28);
+            this.trackBarDec.Location = new System.Drawing.Point(1115, 47);
             this.trackBarDec.Maximum = 90;
             this.trackBarDec.Name = "trackBarDec";
             this.trackBarDec.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -84,17 +85,28 @@
             this.trackBarDec.TabIndex = 5;
             this.trackBarDec.Scroll += new System.EventHandler(this.trackBar_Scroll);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 12;
+            this.listBox1.Location = new System.Drawing.Point(1166, 47);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(136, 388);
+            this.listBox1.TabIndex = 6;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(980, 627);
+            this.ClientSize = new System.Drawing.Size(1315, 733);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.trackBarDec);
             this.Controls.Add(this.trackBarRA);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.imageBox1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
@@ -108,11 +120,12 @@
 
         #endregion
 
-        private Emgu.CV.UI.ImageBox imageBox1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.TrackBar trackBarRA;
         private System.Windows.Forms.TrackBar trackBarDec;
+        public Emgu.CV.UI.ImageBox imageBox1;
+        public System.Windows.Forms.ListBox listBox1;
     }
 }
 

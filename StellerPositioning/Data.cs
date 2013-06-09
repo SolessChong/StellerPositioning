@@ -64,25 +64,28 @@ namespace StellerPositioning
         static public float scale { get; set; }
 
         // Harvard Revised Catalog ID
-        public String HRid { get; private set; }
+        public String HR_name { get; private set; }
+        public String Proper_name { get; private set; }
 
         #endregion
 
         #region Constructors and Interface
 
-        public Star(float ra, float dec, float magnitude, string hrid = "")
+        public Star(float ra, float dec, float magnitude, string hr_name = "", string proper_name = "")
         {
             RA = ra; Dec = dec; Magnitude = magnitude;
 
-            HRid = hrid;
+            HR_name = hr_name;
+            Proper_name = proper_name;
         }
 
 
         public Star() { }
 
-        public String ToString()
+        
+        override public String ToString()
         {
-            return HRid + String.Format("RA:{0},Dec:{1},mag:{2}", RA.ToString(), Dec.ToString(), Magnitude.ToString());
+            return HR_name + "," + Proper_name + String.Format(" RA:{0},Dec:{1},mag:{2}", RA.ToString(), Dec.ToString(), Magnitude.ToString());
         }
 
         #endregion
@@ -98,6 +101,7 @@ namespace StellerPositioning
             using (CsvReader csv = new CsvReader(new StreamReader("data/hygxyz.csv"), true))
             {
                 int fieldCount = csv.FieldCount;
+                
                 string[] headers = csv.GetFieldHeaders();
 
                 starList = new List<Star>();
@@ -106,11 +110,12 @@ namespace StellerPositioning
                 {
                     float   ra  = float.Parse(csv[7]),
                             dec = float.Parse(csv[8]),
-                            mag = float.Parse(csv[14]);
+                            mag = float.Parse(csv[13]);
                     // Harvad Revised Catalog ID
-                    string  hr  = csv[3];
+                    string hr_name = csv[3] + ",";
+                    string proper_name = csv[5] + "," + csv[6];
 
-                    starList.Add(new Star(ra, dec, mag, hr));
+                    starList.Add(new Star(ra, dec, mag, hr_name, proper_name));
                 }
             }
         }
